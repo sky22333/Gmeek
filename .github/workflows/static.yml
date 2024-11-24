@@ -21,16 +21,28 @@ jobs:
           latest_tag=$(git tag --list 'v*' | sort -V | tail -n 1)
           echo "Latest tag: $latest_tag"
           if [ -z "$latest_tag" ]; then
-            echo "No tags found, setting initial tag to v1.0"
-            new_tag="v1.0"
+            echo "No tags found, setting initial tag to v2.1"
+            new_tag="v2.1"
           else
-            # 提取标签号，并递增
+            # 提取版本号，不包含'v'前缀
             version=${latest_tag#v}
-            major_minor=$(echo $version | cut -d '.' -f1-2)
-            patch=$(echo $version | cut -d '.' -f3)
-            new_patch=$((patch + 1))
-            new_tag="v${major_minor}.${new_patch}"
+            # 分割主版本号和次版本号
+            major=$(echo $version | cut -d '.' -f1)
+            minor=$(echo $version | cut -d '.' -f2)
+            
+            # 如果次版本号是9，则主版本号加1，次版本号重置为0
+            if [ "$minor" = "9" ]; then
+              major=$((major + 1))
+              minor=0
+            else
+              # 否则只递增次版本号
+              minor=$((minor + 1))
+            fi
+            
+            # 组合新的标签
+            new_tag="v${major}.${minor}"
           fi
+          
           # 检查新标签是否已存在
           if git rev-parse "$new_tag" >/dev/null 2>&1; then
             echo "Tag $new_tag already exists, skipping release"
