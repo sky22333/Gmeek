@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write  # 允许创建 release
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -17,19 +18,24 @@ jobs:
       - name: Get the latest tag
         id: get_latest_tag
         run: |
+          # 获取最新的标签
           latest_tag=$(git tag --list 'v*' | sort -V | tail -n 1)
           echo "Latest tag: $latest_tag"
+          
+          # 如果没有找到标签，设置初始标签为 v1.0
           if [ -z "$latest_tag" ]; then
             echo "No tags found, setting initial tag to v1.0"
             new_tag="v1.0"
           else
-            # 提取标签号，并递增
-            version=${latest_tag#v}
-            major_minor=$(echo $version | cut -d '.' -f1-2)
-            patch=$(echo $version | cut -d '.' -f3)
-            new_patch=$((patch + 1))
-            new_tag="v${major_minor}.${new_patch}"
+            # 从最新的 tag 提取版本号，递增 patch 部分
+            version=${latest_tag#v}  # 去掉 'v' 前缀
+            major_minor=$(echo $version | cut -d '.' -f1-2)  # 提取 major.minor
+            patch=$(echo $version | cut -d '.' -f3)  # 提取 patch
+            new_patch=$((patch + 1))  # 递增 patch
+            new_tag="v${major_minor}.${new_patch}"  # 生成新的 tag
           fi
+
+          # 输出新标签
           echo "New tag: $new_tag"
           echo "NEW_TAG=$new_tag" >> $GITHUB_ENV
 
@@ -45,8 +51,9 @@ jobs:
           body: |
             ## Changes
             - See the [commit history](https://github.com/${{ github.repository }}/commits/${{ env.NEW_TAG }}) for more details.
-          
+
       - name: Push new tag to repository
         run: |
+          # 推送新标签
           git tag ${{ env.NEW_TAG }}
           git push origin ${{ env.NEW_TAG }}
