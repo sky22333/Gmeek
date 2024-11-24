@@ -14,6 +14,6 @@ if("{{ blogBase['startSite'] }}"!=""){
     var startSite=new Date("{{ blogBase['startSite'] }}");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
-    document.getElementById("runday").innerHTML="{{ i18n['run'] }}"+diffDay+"{{ i18n['days'] }}"+" • ";
+    document.getElementById("runday").innerHTML="{{ i18n['run'] }}"+diffDay+"{{ i18n['days'] }}"+" ";
 }
 </script>
