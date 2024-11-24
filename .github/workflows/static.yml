@@ -14,18 +14,39 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set version from commit SHA
-        run: echo "VERSION=${{ github.sha }}" >> $GITHUB_ENV
+      - name: Get the latest tag
+        id: get_latest_tag
+        run: |
+          latest_tag=$(git tag --list 'v*' | sort -V | tail -n 1)
+          echo "Latest tag: $latest_tag"
+          if [ -z "$latest_tag" ]; then
+            echo "No tags found, setting initial tag to v1.0"
+            new_tag="v1.0"
+          else
+            # 提取标签号，并递增
+            version=${latest_tag#v}
+            major_minor=$(echo $version | cut -d '.' -f1-2)
+            patch=$(echo $version | cut -d '.' -f3)
+            new_patch=$((patch + 1))
+            new_tag="v${major_minor}.${new_patch}"
+          fi
+          echo "New tag: $new_tag"
+          echo "NEW_TAG=$new_tag" >> $GITHUB_ENV
 
       - name: Create GitHub release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.VERSION }}
-          release_name: ${{ env.VERSION }}
+          tag_name: ${{ env.NEW_TAG }}
+          release_name: ${{ env.NEW_TAG }}
           draft: false
           prerelease: false
           body: |
             ## Changes
-            - See the [commit history](https://github.com/${{ github.repository }}/commits/${{ env.VERSION }}) for more details.
+            - See the [commit history](https://github.com/${{ github.repository }}/commits/${{ env.NEW_TAG }}) for more details.
+          
+      - name: Push new tag to repository
+        run: |
+          git tag ${{ env.NEW_TAG }}
+          git push origin ${{ env.NEW_TAG }}
