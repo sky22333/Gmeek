@@ -10,7 +10,7 @@ jobs:
       contents: write  # 允许创建 release
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # 获取所有历史记录，确保能获取到所有标签
           
