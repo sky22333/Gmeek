@@ -26,6 +26,37 @@
 .listLabels{white-space:nowrap;display:flex;}
 .listLabels object{max-height:16px;max-width:24px;}
 
+.blogTitle {
+  --text-node-count: 3;
+  --single-duration: 1.2s;
+  color: #fff;
+  font-size: 8em;
+  font-family: "Protest Revolution", sans-serif;
+  font-weight: 400;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  letter-spacing: 4px;
+  animation: ani calc(var(--text-node-count) * var(--single-duration)) infinite;
+  animation-delay: calc(
+    (var(--i) * var(--single-duration)) - var(--text-node-count) * var(--single-duration)
+  );
+}
+
+@keyframes ani {
+  0%, 100% {
+    color: #fff;
+    filter: blur(0);
+    opacity: 1;
+  }
+
+  35%, 55% {
+    filter: blur(35px);
+    opacity: 0;
+  }
+}
+    
 @media (max-width: 600px) {
     body {padding: 8px;}
     .avatar {width:40px;height:40px;}
@@ -43,7 +74,9 @@
     {%- if blogBase['displayTitle']=='Meekdai' -%}
     <a class="blogTitle" href="https://meekdai.com"><span style="font-size:0;">M</span>eekdai</a>
     {% else -%}
-    <a class="blogTitle">{{ blogBase['displayTitle'] }}</a>
+    <a class="blogTitle" style="--i: 1">{{ blogBase['displayTitle'] }}</a>
+    <a class="blogTitle" style="--i: 2">{{ blogBase['displayTitle'] }}</a>
+    <a class="blogTitle" style="--i: 3">{{ blogBase['displayTitle'] }}</a>
     {%- endif -%}
 </div>
 <div class="title-right">
