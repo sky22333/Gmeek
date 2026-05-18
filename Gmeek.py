@@ -9,7 +9,7 @@ import urllib
 import requests
 import argparse
 import html
-from github import Github
+from github import Auth, Github
 from xpinyin import Pinyin
 from feedgen.feed import FeedGenerator
 from jinja2 import Environment, FileSystemLoader
@@ -45,7 +45,7 @@ class GMEEK():
         self.backup_dir='backup/'
         self.post_dir=self.root_dir+self.post_folder
 
-        user = Github(self.options.github_token)
+        user = Github(auth=Auth.Token(self.options.github_token))
         self.repo = self.get_repo(user, options.repo_name)
         self.feed = FeedGenerator()
         self.oldFeedString=''
