@@ -75,11 +75,16 @@ document.addEventListener("DOMContentLoaded", function() {
             padding: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
             transform: translateY(20px) scale(0.9);
             transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+        }
+        .toc::-webkit-scrollbar {
+            display: none;
         }
         .toc.show {
             opacity: 1;
