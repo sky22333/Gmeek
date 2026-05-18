@@ -18,7 +18,6 @@
 #postBody{padding-bottom:40px;border-bottom:1px solid var(--borderColor-muted,var(--color-border-muted));}
 #postBody hr{height:2px;border-radius:999px;}
 #postBody blockquote{border-left-width:3px;color:var(--fgColor-muted,var(--color-fg-muted));}
-#postBody .highlight,#postBody pre{box-shadow:inset 0 0 0 1px var(--borderColor-muted,var(--color-border-muted));}
 .post-meta{margin-top:12px;text-align:right;font-size:13px;color:var(--fgColor-muted,var(--color-fg-muted));}
 #cmButton{height:46px;margin-top:44px;border-radius:8px;font-weight:600;}
 #comments{margin-top:48px;}
@@ -27,8 +26,6 @@
     .postTitle{max-width:100%;}
 }
 {% if blogBase['highlight']!=0 -%}
-.snippet-clipboard-content{border-radius:8px;background:var(--bgColor-muted,var(--color-canvas-subtle));}
-.snippet-clipboard-content pre{margin:0;}
 .snippet-clipboard-content .clipboard-container{opacity:.72;transition:opacity .18s ease;}
 .snippet-clipboard-content:hover .clipboard-container{opacity:1;}
 .ClipboardButton{border-radius:6px!important;background:var(--bgColor-default,var(--color-canvas-default))!important;}
